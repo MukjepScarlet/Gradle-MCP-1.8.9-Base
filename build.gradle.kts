@@ -1,5 +1,6 @@
 plugins {
     java
+    id("com.gradleup.shadow") version "8.3.6" // 9.x requires Java 11+
 }
 
 group = "net.example"
@@ -12,15 +13,19 @@ repositories {
     maven("https://libraries.minecraft.net/")
 }
 
-/** These libraries will be downloaded via `version.json` */
+/** These libraries will be downloaded via `version.json` and excluded from shadowJar */
 val gameLibrary: Configuration by configurations.creating
 
-configurations.compileOnly {
+/** These libraries will be included in shadowJar */
+val library: Configuration by configurations.creating
+
+configurations.implementation {
     extendsFrom(gameLibrary)
+    extendsFrom(library)
 }
 
-configurations.runtimeOnly {
-    extendsFrom(gameLibrary)
+configurations.shadow {
+    extendsFrom(library)
 }
 
 tasks.register<JavaExec>("runClient") {
@@ -66,9 +71,21 @@ dependencies {
     gameLibrary("com.paulscode.sound:codecjorbis:20101023")
     gameLibrary("com.paulscode.sound:librarylwjglopenal:20100824")
     gameLibrary("com.mojang:authlib:1.5.21")
+
+//    Add your libraries here!
+//    library("com.squareup.okhttp3:okhttp:5.0.0-alpha.16")
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
+
+tasks.shadowJar {
+    configurations = listOf(project.configurations.shadow.get())
+}
+
+tasks.build {
+    dependsOn(tasks.shadowJar)
 }
