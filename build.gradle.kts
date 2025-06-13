@@ -1,5 +1,6 @@
 plugins {
     java
+//    kotlin("jvm") version "2.1.21"
     id("com.gradleup.shadow") version "8.3.6" // 9.x requires Java 11+
 }
 
@@ -73,8 +74,14 @@ dependencies {
     gameLibrary("com.mojang:authlib:1.5.21")
 
 //    Add your libraries here!
-//    library("com.squareup.okhttp3:okhttp:5.0.0-alpha.16")
+//    library(kotlin("stdlib")) // You should add this if you use Kotlin
 }
+
+//kotlin {
+//    compilerOptions {
+//        jvmToolchain(8)
+//    }
+//}
 
 java {
     toolchain {
