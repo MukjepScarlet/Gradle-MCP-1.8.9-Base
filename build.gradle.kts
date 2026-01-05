@@ -4,8 +4,13 @@ plugins {
     id("com.gradleup.shadow") version "8.3.6" // 9.x requires Java 11+
 }
 
-group = "net.example"
-version = "1.8.9"
+val minecraftVersion = "1.8.9"
+
+base {
+    archivesName = "MyClient"
+    group = "moe.lasoleil"
+    version = "0.1.0+$minecraftVersion" // https://semver.org
+}
 
 repositories {
     mavenCentral()
