@@ -20,21 +20,21 @@ public class Start {
         String nativePath;
 
         if (osName.contains("win")) {
-            nativePath = "../natives/windows";
+            nativePath = "natives/windows";
         } else if (osName.contains("mac")) {
-
             if (osArch.contains("aarch64") || osArch.contains("arm64")) {
                 nativePath = "natives/osx_silicon";
             } else {
                 nativePath = "natives/osx";
             }
         } else if (osName.contains("nix") || osName.contains("nux")) {
-            nativePath = "../natives/linux";
+            nativePath = "natives/linux";
         } else {
             throw new UnsupportedOperationException("Unsupported operating system: " + osName);
         }
 
-        String absoluteNativePath = new File(nativePath).getAbsolutePath();
+        String absoluteNativePath = new File(new File(currentDir).getParentFile(), nativePath)
+            .getAbsolutePath();
         File nativeDir = new File(absoluteNativePath);
 
         if (!nativeDir.exists()) {
